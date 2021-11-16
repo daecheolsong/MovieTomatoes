@@ -1,5 +1,5 @@
 import math
-
+import re
 import requests
 from bs4 import BeautifulSoup
 
@@ -18,7 +18,8 @@ def calc_pages(movie_code):
     doc = BeautifulSoup(result.text,'html.parser')
 
     all_count = doc.select('strong.total > em')[0].get_text().strip()
-    pages = math.ceil(int(all_count) / 10)
+    numbers = re.sub(r'[^0-9]', '', all_count) # 정규식활용 => 0~9숫자 외의 값은 ''으로 제거
+    pages = math.ceil(int(numbers) / 10)
     return pages
 
 def get_reviews(title,movie_code,page):
