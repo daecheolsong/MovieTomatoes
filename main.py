@@ -10,6 +10,7 @@
 
 # 만든이 : daecheolsong
 # 일자 : 2021. 11. 09
+import math
 
 import requests
 from bs4 import BeautifulSoup
@@ -31,10 +32,19 @@ movie_code = '209496'  # 네이버 영화 code
 title = wcs.get_movie_title(movie_code)
 print(title)
 
+# 2.전체 페이지수 계산
+
+pages = wcs.calc_pages(movie_code)
+print(pages)
+
+# 3. 리뷰 수집
+
+wcs.get_reviews(title,movie_code,pages)
 
 ########################
 # 2. 인공지능 분석        #
 ########################
+
 
 
 
