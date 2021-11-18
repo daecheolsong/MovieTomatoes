@@ -2,18 +2,21 @@ import math
 import re
 import requests
 from bs4 import BeautifulSoup
+from model.MongoDAO import add_review
+
 
 def get_movie_title(movie_code):
 
-    url ='https://movie.naver.com/movie/bi/mi/basic.naver?code={}'.format(movie_code)
+    url = 'https://movie.naver.com/movie/bi/mi/basic.naver?code={}'.format(movie_code)
     result = requests.get(url)
     doc = BeautifulSoup(result.text,'html.parser')
 
     title = doc.select('h3.h_movie a')[0].get_text()
     return title
 
+
 def calc_pages(movie_code):
-    url ='https://movie.naver.com/movie/bi/mi/basic.naver?code={}'.format(movie_code)
+    url = 'https://movie.naver.com/movie/bi/mi/basic.naver?code={}'.format(movie_code)
     result = requests.get(url)
     doc = BeautifulSoup(result.text,'html.parser')
 
@@ -21,6 +24,7 @@ def calc_pages(movie_code):
     numbers = re.sub(r'[^0-9]', '', all_count) # 정규식활용 => 0~9숫자 외의 값은 ''으로 제거
     pages = math.ceil(int(numbers) / 10)
     return pages
+
 
 def get_reviews(title,movie_code,page):
     count = 0  # Total Review Count
@@ -63,3 +67,12 @@ def get_reviews(title,movie_code,page):
             print(':: WRITER -> {}'.format(writer))
             print(':: SCORE-> {}'.format(score_text))
             print(':: DATE -> {}'.format(date))
+
+            data ={'title': title,
+                   'score': score_text,
+                   'review': review,
+                   'writer': writer,
+                   'date': date}
+            # MongoDB에 Review 저장
+            # Mongo dict type 으로 저장
+            add_review(data)
