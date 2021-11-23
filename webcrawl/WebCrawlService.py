@@ -68,11 +68,11 @@ def get_reviews(title,movie_code,page):
             print(':: SCORE-> {}'.format(score_text))
             print(':: DATE -> {}'.format(date))
 
-            data ={'title': title,
-                   'score': score_text,
-                   'review': review,
-                   'writer': writer,
-                   'date': date}
+            data = {'title': title,
+                    'score': score_text,
+                    'review': review,
+                    'writer': writer,
+                    'date': date}
             # MongoDB에 Review 저장
             # Mongo dict type 으로 저장
             add_review(data)
